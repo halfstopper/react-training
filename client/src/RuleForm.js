@@ -6,8 +6,14 @@ import * as Yup from "yup";
 import RuleTitleField from "./RuleTitleField";
 import RuleDescriptionField from "./RuleDescriptionField";
 import isObjectEmpty from "./utils/isObjectEmpty";
+import { addRule, updateRule } from "./actions/rules-actions";
 
-const RuleForm = ({ rule: { id, title, description } }) => {
+const RuleForm = ({
+  rule: { id, title, description },
+  updateRule,
+  addRule,
+  history
+}) => {
   const initialValues = {
     id,
     title: title || "",
@@ -23,6 +29,11 @@ const RuleForm = ({ rule: { id, title, description } }) => {
       .max(100, "The description must be shorter than 100 characters")
   });
 
+  const handleSubmit = values => {
+    const submitActionCreator = id ? updateRule : addRule;
+    submitActionCreator(values, history);
+  };
+
   return (
     <div className="panel panel-primary">
       <div className="panel-heading">
@@ -30,7 +41,7 @@ const RuleForm = ({ rule: { id, title, description } }) => {
       </div>
       <div className="panel-body">
         <Formik
-          onSubmit={values => console.log(values)}
+          onSubmit={handleSubmit}
           initialValues={initialValues}
           validationSchema={validationSchema}
           render={({ errors, dirty, isSubmitting }) => (
@@ -74,4 +85,12 @@ const mapStateToProps = ({ rules }, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(RuleForm);
+const mapDispatchToProps = {
+  addRule,
+  updateRule
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RuleForm);
