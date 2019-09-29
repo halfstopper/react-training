@@ -9,7 +9,7 @@ const RuleList = ({ rules, loadRules }) => {
     loadRules();
   }, []);
 
-  const newRules = rules.map(rule => <Rule key={rule.id} rule={rule} />);
+  const newRules = rules.map(rule => <Rule key={rule.id} pRule={rule} />);
 
   return <Fragment>{newRules}</Fragment>;
 };

@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { doLike, doDislike } from "./actions/likes-actions";
 
-const LikeBtn = ({ type, counter: initialCount }) => {
-  const [counter, setCounter] = useState(initialCount);
+const LikeBtn = ({ pType, pId, rules, doLike, doDislike }) => {
+  const isUp = () => pType === "up";
   const increment = () => {
-    setCounter(prev => prev + 1);
+    if (isUp()) doLike(pId);
+    else doDislike(pId);
   };
-  const title = type === "up" ? "+1" : "-1";
+  const title = isUp() ? "+1" : "-1";
+  const rule = rules.find(rule => rule.id === pId);
+  const counter = pType === "up" ? rule.likes : rule.dislikes;
+
   return (
     <button className="btn btn-default" title={title} onClick={increment}>
-      {counter} <i className={`glyphicon glyphicon-thumbs-${type}`}></i>
+      {counter} <i className={`glyphicon glyphicon-thumbs-${pType}`}> </i>
     </button>
   );
 };
@@ -19,8 +25,20 @@ LikeBtn.defaultProps = {
 };
 
 LikeBtn.propTypes = {
-  type: PropTypes.oneOf(["up", "down"]).isRequired,
-  counter: PropTypes.number
+  pType: PropTypes.oneOf(["up", "down"]).isRequired,
+  pId: PropTypes.number
 };
 
-export default LikeBtn;
+const mapStateToProps = ({ rules }) => ({
+  rules
+});
+
+const mapDispatchToProps = {
+  doLike,
+  doDislike
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LikeBtn);
