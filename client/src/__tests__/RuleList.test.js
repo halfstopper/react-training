@@ -10,7 +10,7 @@ describe("Rule List", () => {
   beforeEach(() => {
     ({ getByText } = renderWithRedux(<RuleList />, {
       initialState: {
-        rules: []
+        rules
       }
     }));
   });

@@ -1,23 +1,41 @@
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import fetchMock from "fetch-mock";
 import { DO_LIKE, DO_DISLIKE, doLike, doDislike } from "../likes-actions";
 
-describe("Likes Actions", () => {
-  test("should post like", () => {
-    const expectedAction = {
-      type: DO_LIKE,
-      payload: 5
-    };
-    const action = doLike(5);
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
-    expect(action).toEqual(expectedAction);
+describe("Likes Actions", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  test("should post like", () => {
+    const store = mockStore([]);
+    const expectedActions = [DO_LIKE];
+
+    fetchMock.get("*", {
+      response: 200
+    });
+
+    store.dispatch(doLike(5)).then(() => {
+      const actualActions = store.getActions().map(action => action.type);
+      expect(actualActions).toEqual(expectedActions);
+    });
   });
 
   test("should post dislike", () => {
-    const expectedAction = {
-      type: DO_DISLIKE,
-      payload: 15
-    };
-    const action = doDislike(15);
+    const store = mockStore([]);
+    const expectedActions = [DO_DISLIKE];
 
-    expect(action).toEqual(expectedAction);
+    fetchMock.get("*", {
+      response: 200
+    });
+
+    store.dispatch(doDislike(15)).then(() => {
+      const actualActions = store.getActions().map(action => action.type);
+      expect(actualActions).toEqual(expectedActions);
+    });
   });
 });
