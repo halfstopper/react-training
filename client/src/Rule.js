@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import LikeBtn from "./LikeBtn";
 import "./Rule.css";
 
@@ -28,9 +29,9 @@ const Rule = ({ pRule }) => {
         <div className="btn-toolbar">
           {newTags}
           <div className="btn-group btn-group-xs pull-right">
-            <button className="btn btn-primary" title="Update">
+            <Link to={`/edit/${id}`} className="btn btn-primary" title="Update">
               <i className="glyphicon glyphicon-pencil"></i>
-            </button>
+            </Link>
           </div>
           <div className="btn-group btn-group-xs pull-right">
             <LikeBtn pType="up" pId={id} />

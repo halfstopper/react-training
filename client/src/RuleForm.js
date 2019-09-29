@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import RuleTitleField from "./RuleTitleField";
 import RuleDescriptionField from "./RuleDescriptionField";
 
@@ -23,7 +24,10 @@ const RuleForm = ({ rule: { id, title, description } }) => {
 };
 
 RuleForm.defaultProps = {
-  rule: {}
+  rule: {
+    title: "",
+    description: ""
+  }
 };
 
 RuleForm.propTypes = {
@@ -34,4 +38,11 @@ RuleForm.propTypes = {
   }).isRequired
 };
 
-export default RuleForm;
+const mapStateToProps = ({ rules }, ownProps) => {
+  const id = Number(ownProps.match.params.id);
+  return {
+    rule: rules.find(rule => rule.id === id)
+  };
+};
+
+export default connect(mapStateToProps)(RuleForm);
